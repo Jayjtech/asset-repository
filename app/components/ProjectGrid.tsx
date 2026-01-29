@@ -123,17 +123,21 @@ export default function ProjectGrid({
               >
                 <Edit02Icon size={14} />
               </button>
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onDelete(project.id);
-                }}
-                className="cursor-pointer rounded-lg border border-white/10 p-1 text-red-500 hover:border-white/20"
-                aria-label="Delete project"
-              >
-                <Delete02Icon size={14} />
-              </button>
+              {project.createdByUserId &&
+                currentUserId &&
+                project.createdByUserId === currentUserId && (
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onDelete(project.id);
+                    }}
+                    className="cursor-pointer rounded-lg border border-white/10 p-1 text-red-500 hover:border-white/20"
+                    aria-label="Delete project"
+                  >
+                    <Delete02Icon size={14} />
+                  </button>
+                )}
             </div>
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-white/45">

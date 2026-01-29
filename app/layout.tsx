@@ -13,8 +13,11 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
+const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME?.trim() || "";
+const siteName = companyName ? `${companyName} Asset Repo` : "Asset Repo";
+
 export const metadata: Metadata = {
-  title: "Atlas Assets",
+  title: siteName,
   description: "Internal asset platform for teams to upload and manage media.",
 };
 

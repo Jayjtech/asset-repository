@@ -120,7 +120,7 @@ export default function AuthPage() {
 
               <button
                 type="button"
-                className="w-full rounded-xl bg-[#2d8cff] py-3 text-sm font-semibold text-white shadow-[0_18px_30px_-20px_rgba(45,140,255,0.7)]"
+                className="cursor-pointer w-full rounded-xl bg-[#2d8cff] py-3 text-sm font-semibold text-white shadow-[0_18px_30px_-20px_rgba(45,140,255,0.7)]"
               >
                 Create Developer Account
               </button>
@@ -136,14 +136,23 @@ export default function AuthPage() {
           <div className="mt-6 text-center text-xs text-white/50">
             <p>
               Already have a developer account?{" "}
-              <Link href="/auth/login" className="font-semibold text-[#2d8cff]">
+              <Link
+                href="/auth/login"
+                className="cursor-pointer font-semibold text-[#2d8cff]"
+              >
                 Log in here
               </Link>
             </p>
             <div className="mt-3 flex items-center justify-center gap-4 text-[11px] text-white/35">
-              <Link href="#">Terms of Service</Link>
-              <Link href="#">Security Policy</Link>
-              <Link href="#">Privacy</Link>
+              <Link href="#" className="cursor-pointer">
+                Terms of Service
+              </Link>
+              <Link href="#" className="cursor-pointer">
+                Security Policy
+              </Link>
+              <Link href="#" className="cursor-pointer">
+                Privacy
+              </Link>
             </div>
           </div>
         </div>

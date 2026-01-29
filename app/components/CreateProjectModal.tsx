@@ -38,7 +38,7 @@ export default function CreateProjectModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-white/10 p-2 text-white/70 hover:bg-white/5"
+            className="cursor-pointer rounded-lg border border-white/10 p-2 text-white/70 hover:bg-white/5"
           >
             <Cancel01Icon size={14} />
           </button>
@@ -80,14 +80,14 @@ export default function CreateProjectModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
+              className="cursor-pointer rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
+              className="cursor-pointer flex items-center gap-2 rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
             >
               <Add01Icon size={14} />
               {loading ? "Creating..." : "Create Project"}

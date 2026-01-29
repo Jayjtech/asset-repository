@@ -128,7 +128,7 @@ export default function SignupPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="text-white/40 hover:text-white"
+                      className="cursor-pointer text-white/40 hover:text-white"
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
                       }
@@ -158,7 +158,7 @@ export default function SignupPage() {
                     <button
                       type="button"
                       onClick={() => setShowConfirm((prev) => !prev)}
-                      className="text-white/40 hover:text-white"
+                      className="cursor-pointer text-white/40 hover:text-white"
                       aria-label={
                         showConfirm ? "Hide password" : "Show password"
                       }
@@ -219,7 +219,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl bg-[#2d8cff] py-3 text-sm font-semibold text-white shadow-[0_18px_30px_-20px_rgba(45,140,255,0.7)]"
+                className="cursor-pointer w-full rounded-xl bg-[#2d8cff] py-3 text-sm font-semibold text-white shadow-[0_18px_30px_-20px_rgba(45,140,255,0.7)]"
               >
                 {loading ? "Creating account..." : "Create Developer Account"}
               </button>
@@ -235,7 +235,10 @@ export default function SignupPage() {
           <div className="mt-6 text-center text-xs text-white/50">
             <p>
               Already have a developer account?{" "}
-              <Link href="/auth/login" className="font-semibold text-[#2d8cff]">
+              <Link
+                href="/auth/login"
+                className="cursor-pointer font-semibold text-[#2d8cff]"
+              >
                 Log in here
               </Link>
             </p>

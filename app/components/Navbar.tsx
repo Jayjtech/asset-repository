@@ -13,6 +13,8 @@ type UserSummary = {
 
 export default function Navbar() {
   const [user, setUser] = useState<UserSummary | null>(null);
+  const companyName = process.env.NEXT_PUBLIC_COMPANY_NAME?.trim() || "";
+  const siteName = companyName ? `${companyName} Asset Repo` : "Asset Repo";
 
   useEffect(() => {
     const loadUser = async () => {
@@ -44,10 +46,7 @@ export default function Navbar() {
             <Home12Icon size={16} />
           </span>
           <div>
-            <p className="text-xs text-white/60">
-              {process.env.NEXT_PUBLIC_COMPANY_NAME?.slice(0, 10) +
-                "Asset Repo"}
-            </p>
+            <p className="text-xs text-white/60">{siteName}</p>
             <p className="text-xs text-white/40">Developer Console</p>
           </div>
         </div>
@@ -64,7 +63,7 @@ export default function Navbar() {
         ) : (
           <Link
             href="/auth/login"
-            className="rounded-lg bg-[#2d8cff] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(45,140,255,0.35)]"
+            className="cursor-pointer rounded-lg bg-[#2d8cff] px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(45,140,255,0.35)]"
           >
             Login
           </Link>

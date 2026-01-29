@@ -1,28 +1,63 @@
 # Asset Repo
 
-A developer-focused asset management console for organizing projects and assets with modern UI workflows.
+Asset Repo is a developer-focused asset management console for organizing projects and assets, with a clean, modern UI, project thumbnails, and detailed asset views. It integrates with a backend API for authentication, projects, and asset handling.
 
 ## Developer
 
 This project is developed by Jegede Oluwafemi Joshua.
 
-## Getting Started
+## UI Design
 
-First, run the development server:
+![Asset Repo UI Design](UI/design.png)
+
+## Features
+
+- Authentication (login/signup) with token stored in a 7‑day cookie
+- Projects dashboard with grid/list view, search, and pagination
+- Project detail view with asset upload, preview, and actions
+- All Assets page with search, pagination, and deep detail view
+- Mobile-ready sidebar with open/close drawer
+
+## Pages
+
+- `/` — Marketing/landing page
+- `/auth/login` — Developer login
+- `/auth/signup` — Developer registration
+- `/dashboard` — Projects overview
+- `/projects/[id]` — Project detail + assets
+- `/projects/[id]/edit` — Project edit + member management
+- `/assets` — All assets (user + member project assets)
+- `/assets/[id]` — Asset detail page
+
+## Setup
+
+1) Install dependencies:
+
+```bash
+npm install
+```
+
+2) Create a `.env.local` file in the project root:
+
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_COMPANY_NAME=Asset Repo
+NEXT_PUBLIC_COMPANY_DOMAIN=assetrepo.com
+```
+
+3) Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notes
+
+- The app expects the API to run at `NEXT_PUBLIC_API_BASE_URL`.
+- The sidebar navigation links to `/dashboard` and `/assets`.
+- Asset and project data are fetched via the API (no dummy data).
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

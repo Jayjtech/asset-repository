@@ -98,7 +98,7 @@ export default function AssetDetailPage() {
           <div className="flex items-center gap-3 text-xs text-white/50">
             <Link
               href="/assets"
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-[#0b141f] px-3 py-2 text-xs text-white/70 hover:border-white/20"
+              className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 bg-[#0b141f] px-3 py-2 text-xs text-white/70 hover:border-white/20"
             >
               <ArrowLeft02Icon size={14} />
               Back

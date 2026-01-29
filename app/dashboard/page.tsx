@@ -239,7 +239,7 @@ export default function DashboardPage() {
                   setCreateSuccess(null);
                   setShowCreateModal(true);
                 }}
-                className="flex items-center gap-2 rounded-xl bg-[#2d8cff] px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
+                className="cursor-pointer flex items-center gap-2 rounded-xl bg-[#2d8cff] px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
               >
                 <Add01Icon size={16} />
                 New Project
@@ -300,7 +300,7 @@ export default function DashboardPage() {
                   type="button"
                   aria-pressed={view === "grid"}
                   onClick={() => setView("grid")}
-                  className={`grid h-8 w-8 place-items-center rounded-lg border text-xs transition ${
+                  className={`cursor-pointer grid h-8 w-8 place-items-center rounded-lg border text-xs transition ${
                     view === "grid"
                       ? "border-[#2d8cff] bg-[#132238] text-white"
                       : "border-white/10 bg-[#0b141f] text-white/60 hover:bg-white/5"
@@ -312,7 +312,7 @@ export default function DashboardPage() {
                   type="button"
                   aria-pressed={view === "list"}
                   onClick={() => setView("list")}
-                  className={`grid h-8 w-8 place-items-center rounded-lg border text-xs transition ${
+                  className={`cursor-pointer grid h-8 w-8 place-items-center rounded-lg border text-xs transition ${
                     view === "list"
                       ? "border-[#2d8cff] bg-[#132238] text-white"
                       : "border-white/10 bg-[#0b141f] text-white/60 hover:bg-white/5"
@@ -408,7 +408,7 @@ export default function DashboardPage() {
                         setCurrentPage((prev) => Math.max(prev - 1, 1))
                       }
                       disabled={currentPage === 1}
-                      className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
+                      className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
                     >
                       <ArrowLeft01Icon size={12} />
                       Prev
@@ -422,7 +422,7 @@ export default function DashboardPage() {
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                       }
                       disabled={currentPage === totalPages}
-                      className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
+                      className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
                     >
                       Next
                       <ArrowRight01Icon size={12} />

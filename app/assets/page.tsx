@@ -252,7 +252,7 @@ export default function AllAssetsPage() {
                         <span>{formatTimestamp(asset.created_at)}</span>
                         <Link
                           href={`/assets/${asset.id}`}
-                          className="rounded-lg border border-white/10 px-3 py-1 text-[11px] text-white/70 hover:border-white/20"
+                          className="cursor-pointer rounded-lg border border-white/10 px-3 py-1 text-[11px] text-white/70 hover:border-white/20"
                         >
                           View details
                         </Link>
@@ -277,7 +277,7 @@ export default function AllAssetsPage() {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
+                    className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
                   >
                     <ArrowLeft01Icon size={12} />
                     Prev
@@ -291,7 +291,7 @@ export default function AllAssetsPage() {
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
+                    className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
                   >
                     Next
                     <ArrowRight01Icon size={12} />

@@ -28,6 +28,7 @@ import Notification from "../../components/Notification";
 import {
   getErrorMessage,
   getProject,
+  getMe,
   listProjectAssets,
   uploadProjectAsset,
   deleteAsset,
@@ -44,6 +45,7 @@ const fallbackAssets: Array<{
   url?: string;
   resourceType?: string;
   thumbnailUrl?: string;
+  createdByUserId?: number;
 }> = [];
 
 export default function ProjectDetailPage() {
@@ -74,6 +76,7 @@ export default function ProjectDetailPage() {
   const [selectedAsset, setSelectedAsset] = useState<
     (typeof fallbackAssets)[number] | null
   >(null);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
   const formatTimestamp = (value?: string) => {
     if (!value) return "—";
@@ -135,6 +138,10 @@ export default function ProjectDetailPage() {
         thumbnailUrl:
           typeof asset.thumbnail_url === "string"
             ? asset.thumbnail_url
+            : undefined,
+        createdByUserId:
+          typeof asset.created_by_user_id === "number"
+            ? asset.created_by_user_id
             : undefined,
       };
     });
@@ -275,6 +282,16 @@ export default function ProjectDetailPage() {
   };
 
   useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const me = await getMe();
+        if (me?.data?.id) {
+          setCurrentUserId(me.data.id);
+        }
+      } catch {
+        setCurrentUserId(null);
+      }
+    };
     const loadProject = async () => {
       try {
         const response = await getProject(projectId as string);
@@ -306,6 +323,7 @@ export default function ProjectDetailPage() {
       setAssetsLoading(false);
     };
 
+    loadCurrentUser();
     loadProject();
     loadAssets();
   }, [projectId]);
@@ -325,7 +343,7 @@ export default function ProjectDetailPage() {
           <div className="flex items-center gap-3 text-xs text-white/50">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-[#0b141f] px-3 py-2 text-xs text-white/70 hover:border-white/20"
+              className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 bg-[#0b141f] px-3 py-2 text-xs text-white/70 hover:border-white/20"
             >
               <ArrowLeft02Icon size={14} />
               Back
@@ -350,7 +368,7 @@ export default function ProjectDetailPage() {
               <div className="flex flex-wrap items-center gap-3">
                 <Link
                   href={`/projects/${projectId}/edit`}
-                  className="rounded-xl border border-white/10 bg-[#0b141f] px-4 py-2 text-sm text-white/75"
+                  className="cursor-pointer rounded-xl border border-white/10 bg-[#0b141f] px-4 py-2 text-sm text-white/75"
                 >
                   Edit
                 </Link>
@@ -358,7 +376,7 @@ export default function ProjectDetailPage() {
                   href={url}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-xl bg-[#2d8cff] px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
+                  className="cursor-pointer rounded-xl bg-[#2d8cff] px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
                 >
                   Visit Site
                 </a>
@@ -406,29 +424,29 @@ export default function ProjectDetailPage() {
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex flex-wrap items-center gap-3">
                 <div className="flex flex-1 items-center gap-2 rounded-xl border border-white/10 bg-[#0b141f] p-1 text-xs text-white/60 sm:flex-none">
-                  <button
-                    type="button"
-                    aria-pressed={view === "grid"}
-                    onClick={() => setView("grid")}
-                    className={`flex items-center gap-2 rounded-lg px-3 py-2 transition ${
-                      view === "grid"
-                        ? "bg-[#132238] text-white"
-                        : "text-white/50 hover:text-white"
-                    }`}
-                  >
+              <button
+                type="button"
+                aria-pressed={view === "grid"}
+                onClick={() => setView("grid")}
+                className={`cursor-pointer flex items-center gap-2 rounded-lg px-3 py-2 transition ${
+                  view === "grid"
+                    ? "bg-[#132238] text-white"
+                    : "text-white/50 hover:text-white"
+                }`}
+              >
                     <GridViewIcon size={14} />
                     Grid
                   </button>
-                  <button
-                    type="button"
-                    aria-pressed={view === "list"}
-                    onClick={() => setView("list")}
-                    className={`flex items-center gap-2 rounded-lg px-3 py-2 transition ${
-                      view === "list"
-                        ? "bg-[#132238] text-white"
-                        : "text-white/50 hover:text-white"
-                    }`}
-                  >
+              <button
+                type="button"
+                aria-pressed={view === "list"}
+                onClick={() => setView("list")}
+                className={`cursor-pointer flex items-center gap-2 rounded-lg px-3 py-2 transition ${
+                  view === "list"
+                    ? "bg-[#132238] text-white"
+                    : "text-white/50 hover:text-white"
+                }`}
+              >
                     <Menu08Icon size={14} />
                     List
                   </button>
@@ -449,7 +467,7 @@ export default function ProjectDetailPage() {
                   type="button"
                   onClick={() => setShowUploadModal(true)}
                   disabled={uploading}
-                  className="flex w-full items-center justify-center rounded-xl bg-[#2d8cff] px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)] disabled:opacity-70 sm:w-auto"
+                  className="cursor-pointer flex w-full items-center justify-center rounded-xl bg-[#2d8cff] px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)] disabled:opacity-70 sm:w-auto"
                 >
                   <Upload01Icon size={16} />
                   <span className="ml-2">
@@ -510,7 +528,7 @@ export default function ProjectDetailPage() {
                           setSelectedAsset(asset);
                         }
                       }}
-                      className="rounded-2xl border border-white/5 bg-[#0b141f] p-3 transition hover:border-white/20"
+                      className="cursor-pointer rounded-2xl border border-white/5 bg-[#0b141f] p-3 transition hover:border-white/20"
                     >
                       <div className="relative h-36 w-full overflow-hidden rounded-xl border border-white/5 bg-[#101723]">
                         {asset.url ? (
@@ -552,7 +570,7 @@ export default function ProjectDetailPage() {
                               event.stopPropagation();
                               handleCopyUrl(asset);
                             }}
-                            className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-white/60 hover:border-white/20"
+                            className="cursor-pointer grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-white/60 hover:border-white/20"
                             aria-label="Copy asset URL"
                           >
                             <CopyLinkIcon size={14} />
@@ -564,7 +582,7 @@ export default function ProjectDetailPage() {
                                 event.stopPropagation();
                                 setDeleteAssetId(asset.id!);
                               }}
-                              className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-white/40 hover:border-white/20"
+                              className="cursor-pointer grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-red-500 hover:border-white/20"
                               aria-label="Delete asset"
                             >
                               <Delete02Icon size={14} />
@@ -626,7 +644,7 @@ export default function ProjectDetailPage() {
                           setSelectedAsset(asset);
                         }
                       }}
-                      className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#0b141f] px-4 py-3 transition hover:border-white/20"
+                      className="cursor-pointer flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/5 bg-[#0b141f] px-4 py-3 transition hover:border-white/20"
                     >
                       <div className="flex min-w-[220px] items-center gap-3">
                         <div className="relative h-12 w-16 overflow-hidden rounded-lg border border-white/5 bg-[#101723]">
@@ -670,7 +688,7 @@ export default function ProjectDetailPage() {
                               event.stopPropagation();
                               handleCopyUrl(asset);
                             }}
-                            className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-white/60 hover:border-white/20"
+                            className="cursor-pointer grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-white/60 hover:border-white/20"
                             aria-label="Copy asset URL"
                           >
                             <CopyLinkIcon size={14} />
@@ -682,7 +700,7 @@ export default function ProjectDetailPage() {
                                 event.stopPropagation();
                                 setDeleteAssetId(asset.id!);
                               }}
-                              className="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-red-500 hover:border-white/20"
+                              className="cursor-pointer grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-red-500 hover:border-white/20"
                               aria-label="Delete asset"
                             >
                               <Delete02Icon size={14} />
@@ -709,7 +727,7 @@ export default function ProjectDetailPage() {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     disabled={currentPage === 1}
-                    className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
+                    className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
                   >
                     <ArrowLeft01Icon size={12} />
                     Prev
@@ -723,7 +741,7 @@ export default function ProjectDetailPage() {
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
+                    className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-1 text-xs text-white/70 disabled:opacity-40"
                   >
                     Next
                     <ArrowRight01Icon size={12} />
@@ -736,9 +754,15 @@ export default function ProjectDetailPage() {
           <footer className="flex items-center justify-between border-t border-white/5 pt-6 text-xs text-white/40">
             <span>Assets stored securely in this repo</span>
             <div className="flex items-center gap-4">
-              <Link href="#">Documentation</Link>
-              <Link href="#">API Explorer</Link>
-              <Link href="#">Support</Link>
+              <Link href="#" className="cursor-pointer">
+                Documentation
+              </Link>
+              <Link href="#" className="cursor-pointer">
+                API Explorer
+              </Link>
+              <Link href="#" className="cursor-pointer">
+                Support
+              </Link>
             </div>
           </footer>
         </main>
@@ -766,7 +790,7 @@ export default function ProjectDetailPage() {
               <button
                 type="button"
                 onClick={() => setShowUploadModal(false)}
-                className="rounded-lg border border-white/10 p-2 text-white/70 hover:bg-white/5"
+                className="cursor-pointer rounded-lg border border-white/10 p-2 text-white/70 hover:bg-white/5"
               >
                 <Cancel01Icon size={14} />
               </button>
@@ -787,7 +811,7 @@ export default function ProjectDetailPage() {
                   handleUploadMany(event.dataTransfer.files);
                 }
               }}
-              className="mt-5 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-[#0b141f] px-6 py-10 text-center text-xs text-white/55"
+              className="cursor-pointer mt-5 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-[#0b141f] px-6 py-10 text-center text-xs text-white/55"
             >
               <div className="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-[#0f1722]">
                 <Upload01Icon size={20} />
@@ -803,7 +827,7 @@ export default function ProjectDetailPage() {
               <button
                 type="button"
                 onClick={() => setShowUploadModal(false)}
-                className="rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
+                className="cursor-pointer rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
               >
                 Cancel
               </button>
@@ -811,7 +835,7 @@ export default function ProjectDetailPage() {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="flex items-center gap-2 rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)] disabled:opacity-70"
+                className="cursor-pointer flex items-center gap-2 rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)] disabled:opacity-70"
               >
                 <Upload01Icon size={14} />
                 {uploading ? "Uploading..." : "Select files"}
@@ -835,7 +859,7 @@ export default function ProjectDetailPage() {
               <button
                 type="button"
                 onClick={() => setSelectedAsset(null)}
-                className="rounded-lg border border-white/10 p-2 text-white/70 hover:bg-white/5"
+                className="cursor-pointer rounded-lg border border-white/10 p-2 text-white/70 hover:bg-white/5"
               >
                 <Cancel01Icon size={14} />
               </button>
@@ -869,7 +893,7 @@ export default function ProjectDetailPage() {
                 <button
                   type="button"
                   onClick={() => handleCopyUrl(selectedAsset)}
-                  className="flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
+                  className="cursor-pointer flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
                 >
                   <CopyLinkIcon size={14} />
                   Copy URL
@@ -877,7 +901,7 @@ export default function ProjectDetailPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedAsset(null)}
-                  className="rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
+                  className="cursor-pointer rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
                 >
                   Done
                 </button>

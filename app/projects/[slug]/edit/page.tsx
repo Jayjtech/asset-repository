@@ -18,6 +18,7 @@ import Notification from "../../../components/Notification";
 import {
   deleteProject,
   getErrorMessage,
+  getMe,
   getProject,
   listUsers,
   updateProject,
@@ -53,12 +54,24 @@ export default function EditProjectPage() {
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [projectCreatorId, setProjectCreatorId] = useState<number | null>(null);
 
   const normalizeExtraKey = (raw: string) => {
     return raw.trim().replace(/\s+/g, "_").toUpperCase();
   };
 
   useEffect(() => {
+    const loadCurrentUser = async () => {
+      try {
+        const me = await getMe();
+        if (me?.data?.id) {
+          setCurrentUserId(me.data.id);
+        }
+      } catch {
+        setCurrentUserId(null);
+      }
+    };
     const loadProject = async () => {
       setLoading(true);
       try {
@@ -66,6 +79,14 @@ export default function EditProjectPage() {
         if (response?.data) {
           setName(response.data.name ?? "");
           setWebsiteUrl(response.data.website_url ?? "");
+          const createdByUserId = (
+            response.data as { created_by_user_id?: number }
+          ).created_by_user_id;
+          if (typeof createdByUserId === "number") {
+            setProjectCreatorId(createdByUserId);
+          } else {
+            setProjectCreatorId(null);
+          }
           const extraData = (
             response.data as { extra_data?: Record<string, string> }
           ).extra_data;
@@ -84,6 +105,7 @@ export default function EditProjectPage() {
       }
     };
     if (projectId) {
+      loadCurrentUser();
       loadProject();
     }
   }, [projectId]);
@@ -181,6 +203,10 @@ export default function EditProjectPage() {
     }
   };
 
+  const canDeleteProject = Boolean(
+    projectCreatorId && currentUserId && projectCreatorId === currentUserId,
+  );
+
   return (
     <div className="min-h-screen bg-[#0b121a] text-white">
       <Navbar />
@@ -193,7 +219,7 @@ export default function EditProjectPage() {
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="flex items-center gap-2 rounded-lg border border-white/10 bg-[#0b141f] px-3 py-2 text-xs text-white/70 hover:border-white/20"
+              className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 bg-[#0b141f] px-3 py-2 text-xs text-white/70 hover:border-white/20"
             >
               <ArrowLeft02Icon size={14} />
               Back to Projects
@@ -269,7 +295,7 @@ export default function EditProjectPage() {
                     <button
                       type="button"
                       onClick={handleAddExtra}
-                      className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-white/70 hover:bg-white/5"
+                      className="cursor-pointer flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-white/70 hover:bg-white/5"
                     >
                       <Add01Icon size={14} />
                       Add field
@@ -307,7 +333,7 @@ export default function EditProjectPage() {
                         <button
                           type="button"
                           onClick={() => handleRemoveExtra(index)}
-                          className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 text-red-500 hover:bg-white/5"
+                          className="cursor-pointer grid h-9 w-9 place-items-center rounded-xl border border-white/10 text-red-500 hover:bg-white/5"
                           aria-label="Remove field"
                         >
                           <Delete02Icon size={14} />
@@ -353,7 +379,7 @@ export default function EditProjectPage() {
                                 key={user.id}
                                 type="button"
                                 onClick={() => setAddUserEmail(user.email)}
-                                className={`flex w-full items-center justify-between rounded-lg border border-white/10 px-3 py-2 text-xs text-white/70 hover:bg-white/5 ${
+                                className={`cursor-pointer flex w-full items-center justify-between rounded-lg border border-white/10 px-3 py-2 text-xs text-white/70 hover:bg-white/5 ${
                                   user.email === addUserEmail
                                     ? "bg-[#132238]"
                                     : ""
@@ -394,22 +420,24 @@ export default function EditProjectPage() {
                   <button
                     type="button"
                     onClick={() => router.push("/dashboard")}
-                    className="rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
+                    className="cursor-pointer rounded-xl border border-white/10 px-4 py-2 text-xs text-white/70 hover:bg-white/5"
                   >
                     Cancel
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowDeleteModal(true)}
-                    className="flex items-center gap-2 rounded-xl border border-[#f25c5c]/40 px-4 py-2 text-xs text-[#f25c5c] hover:bg-[#1a0f14]"
-                  >
-                    <Delete02Icon size={14} />
-                    Delete Project
-                  </button>
+                  {canDeleteProject && (
+                    <button
+                      type="button"
+                      onClick={() => setShowDeleteModal(true)}
+                      className="cursor-pointer flex items-center gap-2 rounded-xl border border-[#f25c5c]/40 px-4 py-2 text-xs text-[#f25c5c] hover:bg-[#1a0f14]"
+                    >
+                      <Delete02Icon size={14} />
+                      Delete Project
+                    </button>
+                  )}
                   <button
                     type="submit"
                     disabled={saving}
-                    className="rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
+                    className="cursor-pointer rounded-xl bg-[#2d8cff] px-4 py-2 text-xs font-semibold text-white shadow-[0_12px_25px_-18px_rgba(45,140,255,0.8)]"
                   >
                     {saving ? "Saving..." : "Save Changes"}
                   </button>
@@ -438,16 +466,18 @@ export default function EditProjectPage() {
           />
         </div>
       )}
-      <ConfirmModal
-        open={showDeleteModal}
-        title="Delete project?"
-        description="This will permanently delete the project and its assets."
-        confirmLabel="Delete project"
-        destructive
-        loading={deleting}
-        onConfirm={handleDeleteProject}
-        onCancel={() => setShowDeleteModal(false)}
-      />
+      {canDeleteProject && (
+        <ConfirmModal
+          open={showDeleteModal}
+          title="Delete project?"
+          description="This will permanently delete the project and its assets."
+          confirmLabel="Delete project"
+          destructive
+          loading={deleting}
+          onConfirm={handleDeleteProject}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      )}
     </div>
   );
 }

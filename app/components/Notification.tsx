@@ -64,7 +64,7 @@ export default function Notification({
         <button
           type="button"
           onClick={onClose}
-          className="mt-1 text-xs text-white/50 hover:text-white"
+          className="cursor-pointer mt-1 text-xs text-white/50 hover:text-white"
           aria-label="Close notification"
         >
           <Cancel01Icon size={14} />

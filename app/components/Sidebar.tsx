@@ -52,7 +52,7 @@ export default function Sidebar({ active = "Projects" }: SidebarProps) {
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
-        className="fixed left-4 top-20 z-50 grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-[#0f1722] text-white/70 shadow-[0_10px_30px_-20px_rgba(0,0,0,0.8)] lg:hidden"
+        className="cursor-pointer fixed left-4 top-20 z-50 grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-[#0f1722] text-white/70 shadow-[0_10px_30px_-20px_rgba(0,0,0,0.8)] lg:hidden"
         aria-label="Open sidebar"
       >
         <Menu02Icon size={18} />
@@ -60,7 +60,7 @@ export default function Sidebar({ active = "Projects" }: SidebarProps) {
 
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 lg:hidden"
+          className="cursor-pointer fixed inset-0 z-40 bg-black/60 lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
@@ -74,7 +74,7 @@ export default function Sidebar({ active = "Projects" }: SidebarProps) {
         <button
           type="button"
           onClick={() => setMobileOpen(false)}
-          className="ml-auto flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 text-white/70 hover:bg-white/5 lg:hidden"
+          className="cursor-pointer ml-auto flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 text-white/70 hover:bg-white/5 lg:hidden"
           aria-label="Close sidebar"
         >
           <Cancel01Icon size={16} />
@@ -89,7 +89,7 @@ export default function Sidebar({ active = "Projects" }: SidebarProps) {
                 router.push(item.href);
                 setMobileOpen(false);
               }}
-              className={`w-full rounded-xl px-3 py-2 text-left transition ${
+              className={`cursor-pointer w-full rounded-xl px-3 py-2 text-left transition ${
                 item.label === active
                   ? "bg-[#152234] text-white"
                   : "text-white/55 hover:bg-white/5"
@@ -125,7 +125,7 @@ export default function Sidebar({ active = "Projects" }: SidebarProps) {
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm text-white/70 hover:bg-white/5"
+            className="cursor-pointer flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm text-white/70 hover:bg-white/5"
           >
             <Logout01Icon size={16} className="text-red-500" />
             Log out

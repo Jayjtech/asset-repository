@@ -52,6 +52,31 @@ export function clearToken() {
   document.cookie = `${tokenKey}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
 }
 
+function redirectToLogin() {
+  if (typeof window === "undefined") return;
+  window.location.href = "/auth/login";
+}
+
+function handleUnauthenticated() {
+  clearToken();
+  redirectToLogin();
+}
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (typeof window !== "undefined" && axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      const data = error.response?.data as { message?: string } | undefined;
+      const message = data?.message?.toLowerCase();
+      if (status === 401 || message === "unauthenticated.") {
+        handleUnauthenticated();
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 export async function register(payload: {
   name: string;
   email: string;
@@ -221,6 +246,7 @@ export async function listProjectAssets(projectId: string | number) {
 export async function uploadProjectAsset(
   projectId: string | number,
   file: File,
+  onProgress?: (percent: number) => void,
 ) {
   const token = getToken();
   const formData = new FormData();
@@ -231,6 +257,11 @@ export async function uploadProjectAsset(
     {
       headers: {
         Authorization: token ? `Bearer ${token}` : "",
+      },
+      onUploadProgress: (event) => {
+        if (!onProgress || !event.total) return;
+        const percent = Math.round((event.loaded / event.total) * 100);
+        onProgress(Math.min(100, Math.max(0, percent)));
       },
     },
   );

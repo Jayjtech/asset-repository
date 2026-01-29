@@ -64,6 +64,7 @@ export default function ProjectDetailPage() {
     videos: 0,
   });
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [copyNotice, setCopyNotice] = useState<string | null>(null);
@@ -246,10 +247,17 @@ export default function ProjectDetailPage() {
     setUploadError(null);
     setUploadSuccess(null);
     setUploading(true);
+    setUploadProgress(0);
     try {
-      for (const file of list) {
-        await uploadProjectAsset(projectId as string, file);
+      for (const [index, file] of list.entries()) {
+        await uploadProjectAsset(projectId as string, file, (percent) => {
+          const overall = Math.round(
+            ((index + percent / 100) / list.length) * 100,
+          );
+          setUploadProgress(overall);
+        });
       }
+      setUploadProgress(100);
       setUploadSuccess(
         list.length === 1
           ? "Asset uploaded successfully."
@@ -261,6 +269,7 @@ export default function ProjectDetailPage() {
       setUploadError(getErrorMessage(err));
     } finally {
       setUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -841,6 +850,20 @@ export default function ProjectDetailPage() {
                 {uploading ? "Uploading..." : "Select files"}
               </button>
             </div>
+            {uploading && (
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-[11px] text-white/60">
+                  <span>Uploading assets</span>
+                  <span>{uploadProgress}%</span>
+                </div>
+                <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full bg-[#2d8cff] transition-[width] duration-200"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

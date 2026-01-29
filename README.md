@@ -1,4 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Asset Repo
+
+A developer-focused asset management console for organizing projects and assets with modern UI workflows.
+
+## Developer
+
+This project is developed by Jegede Oluwafemi Joshua.
 
 ## Getting Started
 
